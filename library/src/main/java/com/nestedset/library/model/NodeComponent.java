@@ -2,36 +2,22 @@ package com.nestedset.library.model;
 
 import java.util.Set;
 
-public interface NodeComponent {
-    Long getId();
+public abstract class NodeComponent<T> {
+    public NodeComponent(T node) {
+        setNode(node);
+    }
 
-    void setId(Long id);
+    public abstract T getNode();
 
-    String getName();
+    public abstract void setNode(T node);
 
-    void setName(String name);
+    public abstract Set<NodeComponent<T>> getChildren();
 
-    Integer getLft();
+    public abstract void addChild(NodeComponent<T> child);
 
-    void setLft(Integer lft);
+    public abstract NodeComponent<T> getParent();
 
-    Integer getRgt();
+    public abstract void setParent(NodeComponent<T> parent);
 
-    void setRgt(Integer rgt);
-
-    Integer getDepth();
-
-    void setDepth(Integer depth);
-
-    Set<NodeComponent> getChildren();
-
-    void setChildren(Set<NodeComponent> children);
-
-    void addSubNode(NodeComponent child);
-
-    NodeComponent getParent() ;
-
-    void setParent(NodeComponent parent);
-
-    void print(String i) ;
+    public abstract void print(String i);
 }

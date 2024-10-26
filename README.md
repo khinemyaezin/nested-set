@@ -5,25 +5,20 @@ This project demonstrates how to implement a tree structure using a composite pa
 This project constructs with,
 1. **NodeComponent:** `abstract class`
     - is to serve as the base class for implementing a composite pattern, which is a structural design pattern that allows you to treat individual objects (leaves) and compositions of objects (composites) uniformly.
-2. **HibernateNodeRepository:** `abstract class`
-    - is a repository implementation that provides operations for entities. 
-4. **AbstractNodeFunctions:** `abstract class`
-   -  This class is responsible for handling the construction of composite pattern classes.
-5. **NodeTemplate:** `abstract class`
-   - is a template class that provides a structured way to perform operations on NodeComponent class. It acts as a base class that encapsulates the common functionality required for managing hierarchical data structures.
-6. **TreeBuilder:** `class`
+2. **NestedSetNodeRepository:** `interface`
+    - is a repository implementation that provides operations for entities.
+3. **TreeBuilder:** `class`
    - is designed to provide a structured way to construct and manage tree-like hierarchical structures.
 
-![alt text](https://github.com/khinemyaezin/nested-set/blob/main/uml.svg?raw=true)
    
 ## 1. Create the Category Entity
 
-First, create a `Category` entity that extends the `NodeComponent` abstract class. The following annotations are required: `@Id`, `@NameColumn`, `@LeftColumn`, `@RightColumn`, and `@DepthColumn`.
+First, create a `TestNode` entity that extends the `NodeComponent` abstract class. The following annotations are required: `@Id`, `@NameColumn`, `@LeftColumn`, `@RightColumn`, and `@DepthColumn`.
 
 ```java
 @Entity
-@Table(name = "category")
-public class Category extends NodeComponent {
+@Table(name = "node")
+public class TestNode extends NodeComponent {
     @Id
     private Long id;
     @NameColumn
@@ -41,41 +36,40 @@ public class Category extends NodeComponent {
 Next, create the necessary repository classes for handling data operations.
 
 ```java
-@Repository
-public class HibernateCategoryRepository extends HibernateNodeRepository<Category,Long>{
-
-    public HibernateCategoryRepository(EntityManager entityManager) {
-        super(Category.class, entityManager);
+    @Bean
+    public NestedSetRepositoryConfiguration<CategoryEntity,Long> categoryRepositoryConfiguration(JpaContext context) {
+       return new NestedSetRepositoryConfiguration<>(context, CategoryEntity.class);
     }
-}
-@Repository
-public interface JpaCategoryRepository extends JpaNodeRepository<Category,Long> {}
+    
+    @Bean
+    public NestedSetNodeRepository<CategoryEntity,Long> categoryNodeRepository(NestedSetRepositoryConfiguration<CategoryEntity,Long> configuration) {
+       return JpaNestedSetNodeRepositoryFactory.create(configuration, new TreeBuilderImpl<>(new CategoryComponentFactory()));
+    }
 ```
 
 ## 3. Create `CategoryLeaf` and `CategoryComposite` Classes
 Create the `CategoryLeaf` and `CategoryComposite` classes, both extending `NodeComponent`. These classes represent the leaf nodes and composite nodes of the category tree, respectively.
 
 ```java
-public class CategoryLeaf extends NodeComponent {
-    private Long id;
-    private String name;
-    private Integer lft;
-    private Integer rgt;
-    private Integer depth;
-    private NodeComponent parent;
+public class CategoryLeaf<T> extends NodeComponent<T> {
+   private T node;
+   private NodeComponent<T> parent;
+
+   public CategoryLeaf(T node) {
+      super(node);
+   }
 
     // getter, setter
 }
-public class CategoryComposite extends NodeComponent {
-    private Long id;
-    private String name;
-    private Integer lft;
-    private Integer rgt;
-    private Integer depth;
-    private Set<NodeComponent> children = new HashSet<>();
-    private NodeComponent parent;
+public class CategoryComposite<T> extends NodeComponent<T> {
+    private T node;
+    private NodeComponent<T> parent;
+    private final Set<NodeComponent<T>> children = new HashSet<>();
 
-    // getter, setter
+    public CategoryComposite(T node) {
+        super(node);
+    }
+   // getter, setter
 }
 ```
 
@@ -84,58 +78,17 @@ public class CategoryComposite extends NodeComponent {
 Implement a factory class to create instances of CategoryLeaf and CategoryComposite.
 
 ```java
-public class CategoryComponentFactory implements NodeComponentFactory {
+public class CategoryComponentFactory implements NodeComponentFactory<Entity,Long> {
 
-    public NodeComponent createCompositeNodeComponent() {
-        return new CategoryComposite();
-    }
+   @Override
+   public NodeComponent<Entity> createCompositeNodeComponent(Entity entity) {
+      return new CategoryComposite<>(entity);
+   }
 
-    public NodeComponent createLeafNodeComponent() {
-        return new CategoryLeaf();
-    }
-}
-```
-
-## 5. Configure the Application
-
-Create a configuration class to define TreeBuilder bean for Node functions.
-
-```java
-@Configuration
-public class Configuration {
-    @Bean
-    @Primary
-    public TreeBuilder getCategoryTreeBuilder(CategoryComponentFactory factory){
-        return new TreeBuilderImpl(factory);
-    }
-}
-```
-
-## 6. Create the Service Layer
-
-Implement the service layer by extending the AbstractNodeFunctions class and creating a service for category operations.
-
-```java
-@Component
-public class CategoryFunctions extends AbstractNodeFunctions<Category,Long>{
-
-    public CategoryFunctions(NodeRepository<Category, Long> nodeRepository, JpaNodeRepository<Category, Long> jpaNodeRepository, TreeBuilder builder) {
-       super(nodeRepository,jpaNodeRepository, builder);
-    }
-}
-```
-
-Then, create the CategoryService class to handle business logic related to categories.
-
-```java
-@Service
-public class CategoryService extends NodeTemplate<Category, Long>{
-    private final CategoryFunctions categoryFunctions;
-
-    public CategoryServiceImpl(HibernateCategoryRepository hibernateRepository, JpaCategoryRepository jpaRepository, CategoryFunctions nodeFunctions) {
-        super(hibernateRepository, jpaRepository);
-        this.categoryFunctions = nodeFunctions;
-    }
+   @Override
+   public NodeComponent<Entity> createLeafNodeComponent(Entity entity) {
+      return new CategoryLeaf<>(entity);
+   }
 }
 ```
 # Conclusion
