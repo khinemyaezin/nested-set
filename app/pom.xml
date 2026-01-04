@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.coolstuff.core</groupId>
-        <artifactId>nested-set</artifactId>
+        <artifactId>nested-set-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <version>1.0.0</version>
-    <artifactId>app</artifactId>
+    <artifactId>nested-set</artifactId>
     <packaging>jar</packaging>
-    <name>Nested Set Library</name>
+    <name>Nested Set</name>
     <description>A Java library for working with nested set data structures</description>
     <url>https://github.com/khinemyaezin/nested-set</url>
 
@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>com.coolstuff.core</groupId>
-            <artifactId>library</artifactId>
+            <artifactId>nested-set-library</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

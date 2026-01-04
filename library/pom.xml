@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.coolstuff.core</groupId>
-        <artifactId>nested-set</artifactId>
+        <artifactId>nested-set-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <version>1.0.0</version>
-    <artifactId>library</artifactId>
+    <artifactId>nested-set-library</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -17,5 +17,13 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/khinemyaezin/nested-set</url>
+        </repository>
+    </distributionManagement>
 
 </project>
