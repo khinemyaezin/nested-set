@@ -25,6 +25,12 @@ jobs:
           server-username: GITHUB_ACTOR
           server-password: GITHUB_TOKEN
 
+      - name: Publish parent pom
+        run: mvn -B deploy -N --file pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+
       - name: Publish library
         run: mvn -B deploy --file library/pom.xml
         env:
