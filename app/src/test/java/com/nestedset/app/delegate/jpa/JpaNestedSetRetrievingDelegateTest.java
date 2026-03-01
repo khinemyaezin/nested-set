@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,5 +83,30 @@ class JpaNestedSetRetrievingDelegateTest {
         assertTrue(result.isPresent());
         assertEquals(3L, result.get().getId());
         assertEquals("B", result.get().getName());
+    }
+
+    @Test
+    void getImmediateChildren_shouldReturnOnlyImmediateChildren() {
+        // Root(1,10) -> A(2,5) -> C(3,4), Root -> B(6,9) -> D(7,8)
+        TestNode root = new TestNode(1L, "root", 1, 10, 0);
+        TestNode a    = new TestNode(2L, "A",    2,  5, 1);
+        TestNode c    = new TestNode(3L, "C",    3,  4, 2);
+        TestNode b    = new TestNode(4L, "B",    6,  9, 1);
+        TestNode d    = new TestNode(5L, "D",    7,  8, 2);
+
+        entityManager.persist(root);
+        entityManager.persist(a);
+        entityManager.persist(c);
+        entityManager.persist(b);
+        entityManager.persist(d);
+        entityManager.flush();
+
+        List<TestNode> result = delegate.getImmediateChildren(root);
+
+        assertEquals(2, result.size());
+        assertEquals(2L, result.get(0).getId());
+        assertEquals("A", result.get(0).getName());
+        assertEquals(4L, result.get(1).getId());
+        assertEquals("B", result.get(1).getName());
     }
 }
