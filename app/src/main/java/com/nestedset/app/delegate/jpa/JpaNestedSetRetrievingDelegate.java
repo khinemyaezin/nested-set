@@ -62,13 +62,14 @@ public class JpaNestedSetRetrievingDelegate<N extends NestedSet<ID>,ID> extends 
         Root<N> node = query.from(entityClassType);
 
         Predicate leftBetween = criteriaBuilder.between(node.get(configs.getLeftFieldName()), parent.get(configs.getLeftFieldName()), parent.get(configs.getRightFieldName()));
-        Predicate nodeIdMatch = criteriaBuilder.and(criteriaBuilder.equal(node.get(configs.getIdFieldName()), n.getId()));
+        Predicate nodeIdMatch = criteriaBuilder.equal(node.get(configs.getIdFieldName()), n.getId());
+        Predicate parentNotNode = criteriaBuilder.notEqual(parent.get(configs.getIdFieldName()), node.get(configs.getIdFieldName()));
 
         query.select(parent)
-                .where(leftBetween, nodeIdMatch)
-                .orderBy(criteriaBuilder.asc(parent.get(configs.getLeftFieldName())));
-        N result = entityManager.createQuery(query).setMaxResults(1).getSingleResult();
-        return Optional.ofNullable(result);
+                .where(leftBetween, nodeIdMatch, parentNotNode)
+                .orderBy(criteriaBuilder.desc(parent.get(configs.getLeftFieldName())));
+        List<N> results = entityManager.createQuery(query).setMaxResults(1).getResultList();
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.getFirst());
     }
 
     @Override
