@@ -29,26 +29,47 @@ public class JpaNestedSetRetrievingDelegate<N extends NestedSet<ID>,ID> extends 
 
         subQuery.select(cb.diff(cb.count(subParentNode), 1).as(Integer.class))
                 .where(
-                        cb.between(subNode.get(configs.getLeftFieldName()), subParentNode.get(configs.getLeftFieldName()), subParentNode.get(configs.getRightFieldName())),
+                        cb.between(
+                                subNode.get(configs.getLeftFieldName()),
+                                subParentNode.get(configs.getLeftFieldName()),
+                                subParentNode.get(configs.getRightFieldName())
+                        ),
                         cb.equal(subNode.get(configs.getIdFieldName()), n.getId())
                 )
-                .groupBy(subNode.get(configs.getIdFieldName()), subNode.get(configs.getNameFieldName()), subNode.get(configs.getLeftFieldName()));
+                .groupBy(
+                        subNode.get(configs.getIdFieldName()),
+                        subNode.get(configs.getNameFieldName()),
+                        subNode.get(configs.getLeftFieldName())
+                );
 
-
-        query.multiselect(
+        query.select(node)
+                .where(
+                        cb.between(
+                                node.get(configs.getLeftFieldName()),
+                                parent.get(configs.getLeftFieldName()),
+                                parent.get(configs.getRightFieldName())
+                        ),
+                        cb.between(
+                                node.get(configs.getLeftFieldName()),
+                                subParent.get(configs.getLeftFieldName()),
+                                subParent.get(configs.getRightFieldName())
+                        ),
+                        cb.equal(subParent.get(configs.getIdFieldName()), n.getId()),
+                        cb.notEqual(node.get(configs.getIdFieldName()), n.getId())
+                )
+                .groupBy(
                         node.get(configs.getIdFieldName()),
                         node.get(configs.getNameFieldName()),
                         node.get(configs.getLeftFieldName()),
                         node.get(configs.getRightFieldName()),
-                        cb.diff(cb.count(parent), cb.sum(subQuery.getSelection(), 1)).as(Integer.class)
+                        subQuery.getSelection()
                 )
-                .where(
-                        cb.between(node.get(configs.getLeftFieldName()), parent.get(configs.getLeftFieldName()), parent.get(configs.getRightFieldName())),
-                        cb.between(node.get(configs.getLeftFieldName()), subParent.get(configs.getLeftFieldName()), subParent.get(configs.getRightFieldName())),
-                        cb.equal(subParent.get(configs.getIdFieldName()), n.getId())
+                .having(
+                        cb.le(
+                                cb.diff(cb.count(parent), cb.sum(subQuery.getSelection(), 1)),
+                                1
+                        )
                 )
-                .groupBy(node.get(configs.getIdFieldName()), node.get(configs.getNameFieldName()), subQuery.getSelection(), node.get(configs.getLeftFieldName()))
-                .having(cb.le(cb.diff(cb.count(parent), cb.sum(subQuery.getSelection(), 1)), 1))
                 .orderBy(cb.asc(node.get(configs.getLeftFieldName())));
 
         return entityManager.createQuery(query).getResultList();
