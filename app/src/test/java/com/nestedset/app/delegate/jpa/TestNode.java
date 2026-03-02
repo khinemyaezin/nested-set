@@ -30,7 +30,7 @@ public class TestNode implements NestedSet<Long> {
     public TestNode() {
     }
 
-    TestNode(Long id, String name, Integer lft, Integer rgt, Integer depth) {
+    public TestNode(Long id, String name, Integer lft, Integer rgt, Integer depth) {
         this.id = id;
         this.name = name;
         this.lft = lft;
@@ -48,4 +48,17 @@ public class TestNode implements NestedSet<Long> {
     @Override public void    setDepth(Integer depth) { this.depth = depth; }
     public    String  getName()  { return name; }
     public    void    setName(String name) { this.name = name; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestNode testNode = (TestNode) o;
+        return id.equals(testNode.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

@@ -6,9 +6,9 @@
     <parent>
         <groupId>com.coolstuff.core</groupId>
         <artifactId>nested-set-parent</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <artifactId>nested-set-library</artifactId>
     <packaging>jar</packaging>
 

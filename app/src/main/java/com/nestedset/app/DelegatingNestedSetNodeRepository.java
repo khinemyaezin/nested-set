@@ -7,6 +7,8 @@ import com.nestedset.app.service.TreeBuilder;
 import com.nestedset.library.model.NestedSet;
 import com.nestedset.library.model.NodeComponent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class DelegatingNestedSetNodeRepository<N extends NestedSet<ID>,ID> implements NestedSetNodeRepository<N,ID> {
@@ -40,8 +42,11 @@ public class DelegatingNestedSetNodeRepository<N extends NestedSet<ID>,ID> imple
 
     @Override
     public NodeComponent<N> getImmediateChildren(N node) {
-        var children = this.retriever.findImmediateChildren(node);
-        return this.treeBuilder.buildTree(children);
+        List<N> children = this.retriever.findImmediateChildren(node);
+        List<N> nodesWithParent = new ArrayList<>(children.size() + 1);
+        nodesWithParent.add(node);
+        nodesWithParent.addAll(children);
+        return this.treeBuilder.buildTree(nodesWithParent);
     }
 
     @Override
