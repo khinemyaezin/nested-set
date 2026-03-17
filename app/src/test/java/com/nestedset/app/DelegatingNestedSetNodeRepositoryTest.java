@@ -196,4 +196,20 @@ class DelegatingNestedSetNodeRepositoryTest {
         verify(retriever).findTreeAsList();
         verify(treeBuilder).buildTree(treeList);
     }
+
+    @Test
+    void getSubtreeOfA_shouldDelegateToRetrieverAndTreeBuilder() {
+        TestNode b    = new TestNode(4L, "B",    6,  9, 1);
+        TestNode d    = new TestNode(5L, "D",    7,  8, 2);
+        List<TestNode> treeList = List.of(b,d);
+
+        when(retriever.getSubtreeAsList(b)).thenReturn(treeList);
+        when(treeBuilder.buildTree(treeList)).thenReturn(mockNodeComponent);
+
+        NodeComponent<TestNode> result = repository.getSubtreeOf(b);
+
+        assertNotNull(result);
+        verify(retriever).getSubtreeAsList(b);
+        verify(treeBuilder).buildTree(treeList);
+    }
 }

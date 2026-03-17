@@ -28,4 +28,9 @@ public class QueryBasedNestedSetNodeRetriever<N extends NestedSet<ID>, ID> imple
     public List<N> findTreeAsList() {
         return this.queryDelegate.getTreeAsList();
     }
+
+    @Override
+    public List<N> getSubtreeAsList(N node) {
+        return this.queryDelegate.getSubtreeAsList(node);
+    }
 }

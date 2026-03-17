@@ -12,4 +12,5 @@ public interface NestedSetRetrievingDelegate<N extends NestedSet<ID>,ID> {
 
     List<N> getTreeAsList();
 
+    List<N> getSubtreeAsList(N node);
 }

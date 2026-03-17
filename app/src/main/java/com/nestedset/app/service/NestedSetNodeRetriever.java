@@ -11,4 +11,6 @@ public interface NestedSetNodeRetriever<N extends NestedSet<ID>,ID> {
     Optional<N> findParentOf(N node);
 
     List<N> findTreeAsList();
+
+    List<N> getSubtreeAsList(N node);
 }
