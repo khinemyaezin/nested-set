@@ -12,4 +12,5 @@ public interface NestedSetNodeRepository<N extends NestedSet<ID>,ID> {
     NodeComponent<N> getImmediateChildren(N node);
     Optional<N> getParent(N node);
     NodeComponent<N> getTree(N node);
+    NodeComponent<N> getSubtreeOf(N node);
 }
