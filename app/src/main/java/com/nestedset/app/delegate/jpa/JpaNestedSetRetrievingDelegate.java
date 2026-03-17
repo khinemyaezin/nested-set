@@ -94,6 +94,25 @@ public class JpaNestedSetRetrievingDelegate<N extends NestedSet<ID>,ID> extends 
     }
 
     @Override
+    public List<N> getLeafNodes(N node) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<N> query = cb.createQuery(entityClassType);
+        Root<N> root = query.from(entityClassType);
+
+        Expression<Integer> left = root.get(configs.getLeftFieldName()).as(Integer.class);
+        Expression<Integer> right = root.get(configs.getRightFieldName()).as(Integer.class);
+
+        query.select(root)
+                .where(
+                        cb.between(left, node.getLft(), node.getRgt()),
+                        cb.equal(right, cb.sum(left, 1))
+                )
+                .orderBy(cb.asc(left));
+
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
     public List<N> getTreeAsList() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<N> select = cb.createQuery(entityClassType);

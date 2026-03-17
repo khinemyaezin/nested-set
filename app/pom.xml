@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.nestedset</groupId>
         <artifactId>nested-set-parent</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
     <artifactId>nested-set</artifactId>
     <packaging>jar</packaging>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.nestedset</groupId>
             <artifactId>nested-set-library</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

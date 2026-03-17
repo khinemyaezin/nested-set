@@ -55,6 +55,11 @@ public class DelegatingNestedSetNodeRepository<N extends NestedSet<ID>,ID> imple
     }
 
     @Override
+    public List<N> getLeafNodes(N node) {
+        return this.retriever.getLeafNodes(node);
+    }
+
+    @Override
     public NodeComponent<N> getTree(N node) {
         var nodeList = this.retriever.findTreeAsList();
         return this.treeBuilder.buildTree(nodeList);

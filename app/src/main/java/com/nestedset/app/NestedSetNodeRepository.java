@@ -3,6 +3,7 @@ package com.nestedset.app;
 import com.nestedset.library.model.NestedSet;
 import com.nestedset.library.model.NodeComponent;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface NestedSetNodeRepository<N extends NestedSet<ID>,ID> {
@@ -11,6 +12,7 @@ public interface NestedSetNodeRepository<N extends NestedSet<ID>,ID> {
     void removeSubtree(N node);
     NodeComponent<N> getImmediateChildren(N node);
     Optional<N> getParent(N node);
+    List<N> getLeafNodes(N node);
     NodeComponent<N> getTree(N node);
     NodeComponent<N> getSubtreeOf(N node);
 }
