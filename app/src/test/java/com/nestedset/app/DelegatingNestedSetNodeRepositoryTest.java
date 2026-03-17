@@ -183,6 +183,21 @@ class DelegatingNestedSetNodeRepositoryTest {
     }
 
     @Test
+    void getLeafNodes_shouldDelegateToRetriever() {
+        TestNode root = new TestNode(1L, "root", 1, 10, 0);
+        TestNode leaf1 = new TestNode(3L, "leaf1", 3, 4, 2);
+        TestNode leaf2 = new TestNode(5L, "leaf2", 7, 8, 2);
+        List<TestNode> leaves = List.of(leaf1, leaf2);
+
+        when(retriever.getLeafNodes(root)).thenReturn(leaves);
+
+        List<TestNode> result = repository.getLeafNodes(root);
+
+        assertEquals(leaves, result);
+        verify(retriever).getLeafNodes(root);
+    }
+
+    @Test
     void getTree_shouldDelegateToRetrieverAndTreeBuilder() {
         TestNode node = new TestNode(1L, "root", 1, 10, 0);
         List<TestNode> treeList = List.of(node);
