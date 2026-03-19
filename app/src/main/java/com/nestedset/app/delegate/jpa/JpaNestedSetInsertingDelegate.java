@@ -32,7 +32,7 @@ public class JpaNestedSetInsertingDelegate<N extends NestedSet<ID>,ID> extends J
         List<N> result = entityManager.createQuery(cq).getResultList();
 
         for (N node : result) {
-            node.setLft(node.getRgt() + 2);
+            node.setLft(node.getLft() + 2);
             entityManager.merge(node);
         }
     }
