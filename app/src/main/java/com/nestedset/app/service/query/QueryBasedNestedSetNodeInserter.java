@@ -15,10 +15,8 @@ public class QueryBasedNestedSetNodeInserter<N extends NestedSet<ID>,ID> impleme
     @Override
     public N createAsRoot(N entity) {
         Integer right = queryDelegate.getMaxRight();
-        if (right == null) {
-            right = 0;
-        }
-        right++;
+        ensureRootExists(right);
+        right = 1;
 
         entity.setLft(right);
         entity.setRgt(right + 1);
@@ -26,6 +24,12 @@ public class QueryBasedNestedSetNodeInserter<N extends NestedSet<ID>,ID> impleme
 
         queryDelegate.insert(entity);
         return entity;
+    }
+
+    private void ensureRootExists(Integer right) {
+        if (right != null && right > 0) {
+            throw new IllegalStateException("Root node already exists. Only one root node is allowed.");
+        }
     }
 
     @Override

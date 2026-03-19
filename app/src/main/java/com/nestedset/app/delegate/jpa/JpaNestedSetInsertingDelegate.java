@@ -1,6 +1,6 @@
 package com.nestedset.app.delegate.jpa;
 
-import com.nestedset.app.config.NestedSetRepositoryConfiguration;
+import com.nestedset.app.config.JpaNestedSetRepositoryConfiguration;
 import com.nestedset.app.delegate.NestedSetInsertingDelegate;
 import com.nestedset.library.model.NestedSet;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class JpaNestedSetInsertingDelegate<N extends NestedSet<ID>,ID> extends JpaNestedSetDelegate<N,ID> implements NestedSetInsertingDelegate<N,ID> {
 
-    public JpaNestedSetInsertingDelegate(NestedSetRepositoryConfiguration<N,ID> nestedSetRepositoryConfiguration) {
+    public JpaNestedSetInsertingDelegate(JpaNestedSetRepositoryConfiguration<N,ID> nestedSetRepositoryConfiguration) {
         super(nestedSetRepositoryConfiguration);
     }
 
@@ -32,7 +32,7 @@ public class JpaNestedSetInsertingDelegate<N extends NestedSet<ID>,ID> extends J
         List<N> result = entityManager.createQuery(cq).getResultList();
 
         for (N node : result) {
-            node.setLft(node.getRgt() + 2);
+            node.setLft(node.getLft() + 2);
             entityManager.merge(node);
         }
     }

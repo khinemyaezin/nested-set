@@ -1,6 +1,6 @@
 package com.nestedset.app.delegate.jpa;
 
-import com.nestedset.app.config.NestedSetRepositoryConfiguration;
+import com.nestedset.app.config.JpaNestedSetRepositoryConfiguration;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +29,8 @@ class JpaNestedSetRetrievingDelegateTest {
 
     @BeforeEach
     void setUp() {
-        NestedSetRepositoryConfiguration<TestNode, Long> config =
-                new NestedSetRepositoryConfiguration<>(jpaContext, TestNode.class);
+        JpaNestedSetRepositoryConfiguration<TestNode, Long> config =
+                new JpaNestedSetRepositoryConfiguration<>(jpaContext, TestNode.class);
         delegate = new JpaNestedSetRetrievingDelegate<>(config);
     }
 
