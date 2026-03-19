@@ -1,6 +1,6 @@
 package com.nestedset.app.delegate.jpa;
 
-import com.nestedset.app.config.NestedSetRepositoryConfiguration;
+import com.nestedset.app.config.JpaNestedSetRepositoryConfiguration;
 import com.nestedset.app.delegate.NestedSetRetrievingDelegate;
 import com.nestedset.library.model.NestedSet;
 import jakarta.persistence.criteria.*;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class JpaNestedSetRetrievingDelegate<N extends NestedSet<ID>,ID> extends JpaNestedSetDelegate<N,ID> implements NestedSetRetrievingDelegate<N,ID> {
 
-    public JpaNestedSetRetrievingDelegate(NestedSetRepositoryConfiguration<N,ID> nestedSetRepositoryConfiguration) {
+    public JpaNestedSetRetrievingDelegate(JpaNestedSetRepositoryConfiguration<N,ID> nestedSetRepositoryConfiguration) {
         super(nestedSetRepositoryConfiguration);
     }
 

@@ -37,12 +37,12 @@ Next, create the necessary repository classes for handling data operations.
 
 ```java
     @Bean
-    public NestedSetRepositoryConfiguration<CategoryEntity,Long> categoryRepositoryConfiguration(JpaContext context) {
-       return new NestedSetRepositoryConfiguration<>(context, CategoryEntity.class);
+    public JpaNestedSetRepositoryConfiguration<CategoryEntity,Long> categoryRepositoryConfiguration(JpaContext context) {
+       return new JpaNestedSetRepositoryConfiguration<>(context, CategoryEntity.class);
     }
     
     @Bean
-    public NestedSetNodeRepository<CategoryEntity,Long> categoryNodeRepository(NestedSetRepositoryConfiguration<CategoryEntity,Long> configuration) {
+    public NestedSetNodeRepository<CategoryEntity,Long> categoryNodeRepository(JpaNestedSetRepositoryConfiguration<CategoryEntity,Long> configuration) {
        return JpaNestedSetNodeRepositoryFactory.create(configuration, new TreeBuilderImpl<>(new CategoryComponentFactory()));
     }
 ```

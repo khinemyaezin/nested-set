@@ -1,6 +1,6 @@
 package com.nestedset.app.delegate.jpa;
 
-import com.nestedset.app.config.NestedSetRepositoryConfiguration;
+import com.nestedset.app.config.JpaNestedSetRepositoryConfiguration;
 import com.nestedset.app.delegate.NestedSetRemovingDelegate;
 import com.nestedset.library.model.NestedSet;
 import jakarta.persistence.criteria.*;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class JpaNestedSetRemovingDelegate<N extends NestedSet<ID>,ID> extends JpaNestedSetDelegate<N,ID> implements NestedSetRemovingDelegate<N,ID> {
 
-    public JpaNestedSetRemovingDelegate(NestedSetRepositoryConfiguration<N,ID> nestedSetRepositoryConfiguration) {
+    public JpaNestedSetRemovingDelegate(JpaNestedSetRepositoryConfiguration<N,ID> nestedSetRepositoryConfiguration) {
         super(nestedSetRepositoryConfiguration);
     }
 
